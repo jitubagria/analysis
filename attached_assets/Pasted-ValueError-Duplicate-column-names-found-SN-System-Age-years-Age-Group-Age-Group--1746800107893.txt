@@ -1,0 +1,26 @@
+ValueError: Duplicate column names found: ['SN', 'System', 'Age (years)', 'Age Group', 'Age Group', 'Age group', 'Weight (kg)', 'Height (cm)', 'Pre Hb (g/dL)', 'Post Hb (g/dL)', 'Hb Difference', 'Pre HCT (%)', 'Post HCT (%)', 'HCT Difference', 'Pre PLT (×10³/µL)', 'Post PLT (×10³/µL)', 'PLT Difference', 'Pre MPV (fL)', 'Post MPV (fL)', 'MPV Difference', 'Pre PDW (%)', 'Post PDW (%)', 'PDW difference', 'Blood Volume Processed (mL)', 'Flow Rate (mL/min)', 'Separation Time (min)', 'Product Volume (mL)', 'Platelet Count in Bag (×10³/µL)', 'mean plt yield *1011', 'collection efficiency %', 'collection rate plt 10*11/min']
+Traceback:
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 648, in code_to_exec
+    exec(code, module.__dict__)
+File "/home/runner/workspace/app.py", line 2081, in <module>
+    main()
+File "/home/runner/workspace/app.py", line 271, in main
+    st.dataframe(df)
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/metrics_util.py", line 444, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/elements/arrow.py", line 607, in dataframe
+    proto.data = dataframe_util.convert_pandas_df_to_arrow_bytes(data_df)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/dataframe_util.py", line 822, in convert_pandas_df_to_arrow_bytes
+    table = pa.Table.from_pandas(df)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+File "pyarrow/table.pxi", line 4793, in pyarrow.lib.Table.from_pandas
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyarrow/pandas_compat.py", line 595, in dataframe_to_arrays
+    convert_fields) = _get_columns_to_convert(df, schema, preserve_index,
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pyarrow/pandas_compat.py", line 375, in _get_columns_to_convert
+    raise ValueError(

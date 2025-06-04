@@ -1,0 +1,30 @@
+ValueError: Styles supplied as string must follow CSS rule formats, for example 'attr: val;'. 'Amicus' was given.
+Traceback:
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/exec_code.py", line 121, in exec_func_with_error_handling
+    result = func()
+             ^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/scriptrunner/script_runner.py", line 648, in code_to_exec
+    exec(code, module.__dict__)
+File "/home/runner/workspace/app.py", line 2103, in <module>
+    main()
+File "/home/runner/workspace/app.py", line 203, in main
+    display_drag_drop_ui()
+File "/home/runner/workspace/drag_drop_ui.py", line 298, in display_drag_drop_ui
+    st.dataframe(styled_df, height=400)
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/runtime/metrics_util.py", line 444, in wrapped_func
+    result = non_optional_func(*args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/elements/arrow.py", line 599, in dataframe
+    marshall_styler(proto, data, default_uuid)
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/streamlit/elements/lib/pandas_styler_utils.py", line 62, in marshall_styler
+    styler._compute()
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/formats/style_render.py", line 256, in _compute
+    r = func(self)(*args, **kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/formats/style.py", line 2028, in _map
+    self._update_ctx(result)
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/formats/style.py", line 1560, in _update_ctx
+    css_list = maybe_convert_css_to_tuples(c)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+File "/home/runner/workspace/.pythonlibs/lib/python3.11/site-packages/pandas/io/formats/style_render.py", line 1925, in maybe_convert_css_to_tuples
+    raise ValueError(

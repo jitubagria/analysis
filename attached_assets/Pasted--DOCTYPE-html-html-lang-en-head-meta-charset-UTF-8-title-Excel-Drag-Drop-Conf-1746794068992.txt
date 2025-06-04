@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Excel Drag & Drop Config Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-bottom: 5px;
+    }
+
+    .area {
+      margin-bottom: 20px;
+    }
+
+    .dropzone {
+      border: 2px dashed #ccc;
+      background-color: #f9f9f9;
+      min-height: 60px;
+      padding: 10px;
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    .dropzone:hover {
+      background-color: #f0f0f0;
+    }
+
+    .draggable-item {
+      background-color: #d9f1ff;
+      padding: 5px 10px;
+      border: 1px solid #007acc;
+      border-radius: 4px;
+      cursor: grab;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .draggable-item:hover {
+      background-color: #add8e6;
+      transform: scale(1.05);
+    }
+
+    .delete-btn {
+      color: red;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .pair {
+      border: 1px solid #ccc;
+      padding: 10px;
+      background: #fff;
+      margin-bottom: 10px;
+    }
+
+    .pair h3 {
+      margin: 0 0 10px 0;
+    }
+
+    button {
+      margin: 10px 5px 0 0;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    .small-dropzone {
+      width: 200px;
+      height: 60px;
+    }
+
+    .age-type-selection {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .age-type-selection input {
+      margin-right: 5px;
+    }
+
+    @media (max-width: 600px) {
+      .dropzone {
+        flex-direction: column;
+      }
+      .small-dropzone {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Excel Drag & Drop Config Tool</h1>
+  <input type="file" id="fileInput" accept=".xlsx" />
+
+  <div class="area">
+    <h2>Unique Area (Available Fields)</h2>
+    <div id="uniqueArea" class="dropzone"></div>
+  </div>
+
+  <div class="area">
+    <h2>Master Area (Reusable)</h2>
+    <div id="masterArea" class="dropzone small-dropzone"></div>
+  </div>
+
+  <div class="area">
+    <h2>Age Field</h2>
+    <div id="ageField" class="dropzone small-dropzone"></div>
+    <div id="ageTypeSelection" class="age-type-selection" style="display:none;">
+      <label><input type="radio" name="ageType" value="years" checked> Years</label>
+      <label><input type="radio" name="ageType" value="months"> Months</label>
+      <label><input type="radio" name="ageType" value="days"> Days</label>
+    </div>
+  </div>
+
+  <div class="area">
+    <h2>Gender Field</h2>
+    <div id="genderField" class="dropzone small-dropzone"></div>
+  </div>
+
+  <div class="area">
+    <h2>Pairs Area (Pre/Post)</h2>
+    <div id="pairsContainer"></div>
+  </div>
+
+  <button id="addPairBtn">Add Pair</button>
+
+  <div style="margin-top: 30px;">
+    <button id="saveBtn">Save</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <script>
+    let unique = [];
+    let master = [];
+    let age = null;
+    let gender = null;
+    let pairs = [{ id: 'pair-1', pre: [], post: [] }];
+    let nextPairId = 2;
+
+    function createDraggableItem(item, allowDelete = false) {
+      const div = document.createElement('div');
+      div.className = 'draggable-item';
+      div.textContent = item.name;
+      div.draggable = true;
+      div.dataset.id = item.id;
+
+      div.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', JSON.stringify(item));
+      });
+
+      if (allowDelete) {
+        const delBtn = document.createElement('span');
+        delBtn.className = 'delete-btn';
+        delBtn.textContent = '×';
+        delBtn.title = 'Delete';
+        delBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (confirm(`Are you sure you want to delete "${item.name}"?`)) {
+            unique = unique.filter(u => u.id !== item.id);
+            renderAll();
+          }
+        });
+        div.appendChild(delBtn);
+      }
+
+      return div;
+    }
+
+    function renderAll() {
+      renderUniqueArea();
+      renderMasterArea();
+      renderAgeGenderFields();
+      renderPairs();
+    }
+
+    function renderUniqueArea() {
+      const container = document.getElementById('uniqueArea');
+      container.innerHTML = '';
+      unique.forEach(item => container.appendChild(createDraggableItem(item, true)));
+    }
+
+    function renderMasterArea() {
+      const container = document.getElementById('masterArea');
+      container.innerHTML = '';
+      master.forEach(item => container.appendChild(createDraggableItem(item)));
+    }
+
+    function renderAgeGenderFields() {
+      const ageContainer = document.getElementById('ageField');
+      const genderContainer = document.getElementById('genderField');
+
+      ageContainer.innerHTML = '';
+      genderContainer.innerHTML = '';
+
+      if (age) {
+        ageContainer.appendChild(createDraggableItem(age));
+        // Show the age type selection
+        document.getElementById('ageTypeSelection').style.display = 'block';
+      }
+      if (gender) genderContainer.appendChild(createDraggableItem(gender));
+    }
+
+    function renderPairs() {
+      const container = document.getElementById('pairsContainer');
+      container.innerHTML = '';
+      pairs.forEach((pair, idx) => {
+        const pairDiv = document.createElement('div');
+        pairDiv.className = 'pair';
+        pairDiv.innerHTML = `<h3>Pair ${idx + 1}</h3>`;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.textContent = 'Remove Pair';
+        removeBtn.addEventListener('click', () => {
+          if (confirm(`Remove Pair ${idx + 1}?`)) {
+            pairs.splice(idx, 1);
+            renderPairs();
+          }
+        });
+        pairDiv.appendChild(removeBtn);
+
+        const preDrop = document.createElement('div');
+        preDrop.className = 'dropzone';
+        preDrop.textContent = 'Pre';
+        preDrop.addEventListener('dragover', e => e.preventDefault());
+        preDrop.addEventListener('drop', e => handleDrop(e, pair.id, 'pre'));
+
+        const postDrop = document.createElement('div');
+        postDrop.className = 'dropzone';
+        postDrop.textContent = 'Post';
+        postDrop.addEventListener('dragover', e => e.preventDefault());
+        postDrop.addEventListener('drop', e => handleDrop(e, pair.id, 'post'));
+
+        pair.pre.forEach(item => preDrop.appendChild(createDraggableItem(item)));
+        pair.post.forEach(item => postDrop.appendChild(createDraggableItem(item)));
+
+        pairDiv.appendChild(preDrop);
+        pairDiv.appendChild(postDrop);
+        container.appendChild(pairDiv);
+      });
+    }
+
+    function handleDrop(e, targetId, type) {
+      e.preventDefault();
+      const data = JSON.parse(e.dataTransfer.getData('text/plain'));
+
+      // Remove from unique if it came from there
+      unique = unique.filter(i => i.id !== data.id);
+
+      // Check destination
+      if (targetId.startsWith('pair-')) {
+        const pair = pairs.find(p => p.id === targetId);
+        if (type === 'pre') pair.pre.push(data);
+        else pair.post.push(data);
+      } else if (targetId === 'master') {
+        if (!master.find(m => m.id === data.id)) master.push(data);
+      } else if (targetId === 'age') {
+        age = data;
+      } else if (targetId === 'gender') {
+        gender = data;
+      }
+
+      renderAll();
+    }
+
+    function setupDropTargets() {
+      const masterArea = document.getElementById('masterArea');
+      masterArea.addEventListener('dragover', e => e.preventDefault());
+      masterArea.addEventListener('drop', e => handleDrop(e, 'master'));
+
+      const ageField = document.getElementById('ageField');
+      ageField.addEventListener('dragover', e => e.preventDefault());
+      ageField.addEventListener('drop', e => handleDrop(e, 'age'));
+
+      const genderField = document.getElementById('genderField');
+      genderField.addEventListener('dragover', e => e.preventDefault());
+      genderField.addEventListener('drop', e => handleDrop(e, 'gender'));
+    }
+
+    document.getElementById('addPairBtn').addEventListener('click', () => {
+      pairs.push({ id: `pair-${nextPairId++}`, pre: [], post: [] });
+      renderPairs();
+    });
+
+    document.getElementById('fileInput').addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const data = await file.arrayBuffer();
+      const workbook = XLSX.read(data);
+      const sheetName = workbook.SheetNames[0];
+      const sheet = workbook.Sheets[sheetName];
+      const headers = XLSX.utils.sheet_to_json(sheet, { header: 1 })[0];
+
+      unique = headers.map((name, idx) => ({ id: `f${idx}`, name }));
+      master = []; // Clear master
+      age = null;
+      gender = null;
+      pairs = [{ id: 'pair-1', pre: [], post: [] }];
+      nextPairId = 2;
+
+      renderAll();
+    });
+
+    setupDropTargets();
+    renderAll();
+  </script>
+
+</body>
+</html>

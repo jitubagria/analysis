@@ -1,0 +1,71 @@
+Certainly. Here's a **detailed explanation** of the input requirements for common statistical tests, followed by a **summary table** for quick reference.
+
+---
+
+### 1. **T-Test (Independent and Paired)**
+
+* **Test Variable**: Must be **numeric** (e.g., blood pressure, platelet count).
+* **Grouping Variable**: Must be **binary categorical** (e.g., Male/Female, System A/System B).
+* **Reason**: The test compares **means** between two groups.
+
+---
+
+### 2. **ANOVA (One-Way)**
+
+* **Dependent Variable**: Must be **numeric**.
+* **Factor (Group Variable)**: Must be **categorical** with **two or more levels**.
+* **Reason**: ANOVA compares **means** across multiple groups.
+
+---
+
+### 3. **Chi-Square Test (of Independence)**
+
+* **Both Variables**: Must be **categorical**.
+* **Reason**: Tests association between categorical groups (e.g., disease status vs treatment type).
+
+---
+
+### 4. **Correlation (Pearson/Spearman)**
+
+* **Both Variables**: Must be **numeric**.
+* **Pearson**: Assumes linearity and normal distribution.
+* **Spearman**: Rank-based; works with non-normal data.
+* **Reason**: Measures strength and direction of association between two continuous variables.
+
+---
+
+### 5. **Linear Regression**
+
+* **Dependent Variable**: Must be **numeric**.
+* **Independent Variable(s)**: Can be **numeric** or **categorical** (categorical is internally converted to dummy variables).
+* **Reason**: Predicts numeric outcome based on one or more predictors.
+
+---
+
+### 6. **Logistic Regression**
+
+* **Dependent Variable**: Must be **binary categorical** (e.g., Yes/No).
+* **Independent Variable(s)**: Can be **numeric or categorical**.
+* **Reason**: Models the probability of a binary outcome.
+
+---
+
+### Summary Table: Variable Types for Common Tests
+
+| Test Type            | Dependent Variable   | Independent / Grouping Variable | Notes                                             |
+| -------------------- | -------------------- | ------------------------------- | ------------------------------------------------- |
+| T-Test               | Numeric              | Categorical (2 groups)          | Use Paired t-test for pre/post comparisons        |
+| ANOVA                | Numeric              | Categorical (2+ groups)         | Shows differences in means across multiple groups |
+| Chi-Square Test      | Categorical          | Categorical                     | Tests independence between categorical variables  |
+| Pearson Correlation  | Numeric              | Numeric                         | Requires linear and normal data                   |
+| Spearman Correlation | Numeric (or ordinal) | Numeric (or ordinal)            | Non-parametric, no need for normality             |
+| Linear Regression    | Numeric              | Numeric or Categorical          | Predicts continuous outcome                       |
+| Logistic Regression  | Categorical (binary) | Numeric or Categorical          | Predicts binary outcome                           |
+
+---
+
+### Conclusion
+
+Your implementation is **statistically sound** in showing only numeric columns for t-test and ANOVA. As you extend support to other tests (e.g., Chi-square, correlation, regression), applying similar input validation based on the above will ensure correct test logic and improve user experience.
+
+Would you like help implementing automated variable-type detection and validation rules for other statistical tests in your app?
