@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D&D Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="columns-source-container">
+            <h4>Available Columns (Drag from here)</h4>
+            <div id="columns-source" class="column-list">
+                </div>
+        </div>
+        <div id="drop-zones-container">
+            <h4>Configuration Zones (Drop here)</h4>
+            <div class="dropzone-group">
+                <label for="x-axis-dropzone">X-Axis:</label>
+                <div id="x-axis-dropzone" class="dropzone single-item-zone"></div>
+            </div>
+            <div class="dropzone-group">
+                <label for="y-axis-dropzone">Y-Axis(es):</label>
+                <div id="y-axis-dropzone" class="dropzone multi-item-zone"></div>
+            </div>
+            <div class="dropzone-group">
+                <label for="color-dropzone">Color/Group By:</label>
+                <div id="color-dropzone" class="dropzone single-item-zone"></div>
+            </div>
+            </div>
+    </div>
+    <script src="main.js"></script>
+</body>
+</html>

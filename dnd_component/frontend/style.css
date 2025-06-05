@@ -1,0 +1,9 @@
+body { font-family: sans-serif; margin: 10px; }
+.container { display: flex; gap: 20px; }
+#columns-source-container, #drop-zones-container { border: 1px solid #ccc; padding: 10px; border-radius: 5px; }
+.column-list, .dropzone { min-height: 50px; background-color: #f9f9f9; padding: 5px; margin-bottom:10px; border: 1px dashed #ddd; border-radius: 4px;}
+.draggable-item { background-color: #e0e0e0; color: #333; padding: 8px; margin: 4px; border: 1px solid #ccc; border-radius: 4px; cursor: grab; }
+.dropzone-group { margin-bottom: 15px; }
+.dropzone-group label { display: block; margin-bottom: 5px; font-weight: bold;}
+/* Styling for items when they are being dragged (provided by SortableJS) */
+.sortable-ghost { opacity: 0.4; background: #c8ebfb; }

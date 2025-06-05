@@ -1,0 +1,15 @@
+{
+  "name": "dnd-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "sortablejs": "^1.15.0" 
+  },
+  "scripts": {
+    "start": "react-scripts start", // Example if using Create React App for dev server
+    "build": "react-scripts build", // Example
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  }
+  // Add other necessary configurations for your chosen frontend setup
+}
